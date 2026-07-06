@@ -5,6 +5,9 @@ __pycache__/
 
 # Local token storage
 trakt_tokens.json
+# Local token storage
+trakt_tokens.json
+last_sync_time.json
 
 # C extensions
 *.so
