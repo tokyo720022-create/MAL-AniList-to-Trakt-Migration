@@ -25,10 +25,10 @@ This system is heavily optimized for speed, precision routing, and multi-channel
 ## 🛠️ System Architecture & Prerequisites
 
 1.  **Python 3.x** environment.
-2.  **External Libraries:** `requests` and `tqdm`.
+2.  **External Libraries:** Managed via `requirements.txt`.
 3.  **Accounts:** A Trakt.tv account, and a public AniList or MyAnimeList account.
 4.  **API Credentials Required:**
-    *   Trakt.tv API Application Client ID & Secret[cite: 1].
+    *   Trakt.tv API Application Client ID & Secret.
     *   *(Optional)* Discord Webhook URL, Google App Password, CallMeBot WhatsApp API Key.
 
 ---
@@ -36,16 +36,75 @@ This system is heavily optimized for speed, precision routing, and multi-channel
 ## 📦 Setup & Deployment
 
 ### 1. Acquire Trakt API Keys
-*   Go to [Trakt API Applications](https://trakt.tv/oauth/applications/new)[cite: 1].
-*   Click "NEW APPLICATION"[cite: 1].
-*   **Name:** "Anime Sync Engine" (or whatever you prefer)[cite: 1].
-*   **Redirect uri:** Enter exactly `urn:ietf:wg:oauth:2.0:oob`[cite: 1].
-*   **Permissions:** Ensure `/sync` permissions are included[cite: 1].
-*   Click "SAVE APP" and copy your `Client ID` and `Client Secret`[cite: 1].
+*   Go to [Trakt API Applications](https://trakt.tv/oauth/applications/new).
+*   Click "NEW APPLICATION".
+*   **Name:** "Anime Sync Engine" (or your preferred name).
+*   **Redirect uri:** Enter exactly `urn:ietf:wg:oauth:2.0:oob`.
+*   **Permissions:** Ensure `/sync` permissions are included.
+*   Click "SAVE APP" and copy your `Client ID` and `Client Secret`.
 
 ### 2. Initialize the Grid
 Clone the repository and install the required dependencies:
 ```bash
 git clone [https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git](https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git)
 cd YOUR_REPO_NAME
-pip install requests tqdm
+pip install -r requirements.txt
+
+3. Hardwire the Core
+Open sync_to_trakt_2.py, trakt_cleanup.py, and trakt_auth.py in your text editor. Locate the configuration blocks at the top of each file and paste your specific API keys, usernames, and communication credentials.
+
+
+Generate Security Clearance (Auth)
+Before running the main engine, establish a secure link to your Trakt account. Run the authentication gateway:
+
+Bash
+
+python trakt_auth.py
+
+Follow the on-screen terminal instructions to input your device code. This will generate a secure trakt_tokens.json file locally. Once completed, your system is fully armed.
+
+5. Execute the Sync Engine
+Launch the main synchronization protocol:
+BASH
+
+python sync_to_trakt_2.py
+
+⚠️ Important Note on Trakt Matching
+This script relies on searching Trakt using the Anime Title and Start Year obtained from AniList/MAL. There is no direct ID mapping available through these public APIs. While highly accurate, variations in naming conventions (e.g., OVAs, Specials, English vs. Romaji titles) can occasionally cause mismatches.
+
+If a specific anime fails to match correctly, utilize the built-in Sniper Dictionary inside sync_to_trakt_2.py to hardcode the exact source and Trakt IDs, forcing a perfect link.
+
+🤖 Windows Ghost Protocol (Total Automation)
+To run this script completely on autopilot every single day, wire it into the Windows Task Scheduler:
+
+1 . Create a Trakt_Sync.bat file on your desktop containing:
+
+DOS
+
+@echo off
+cd /d "C:\Path\To\Your\Script\Folder"
+python sync_to_trakt_2.py
+exit
+
+
+2 .Open Windows Task Scheduler and choose Create Basic Task.
+
+3 .Name it "Trakt Auto-Sync", set the Trigger to Daily (e.g., at 3:00 AM), and point the Action to your Trakt_Sync.bat file.
+
+The script will execute invisibly in the background while you sleep, scanning your delta updates and dropping the mission report to your phone, email, and Discord instantly.
+
+
+☢️ The Purge Protocol (Reversal Engine)
+If you need to wipe the board clean, the repository includes trakt_cleanup.py. This script reads your AniList and systematically hunts down and removes every matched entry from your Trakt History, Ratings, Watchlist, and Custom Lists.
+
+Safety Catch: By default, the script will not execute to prevent accidental wipes. To arm the weapon, open trakt_cleanup.py and change the safety switch:
+
+
+Python
+CONFIRM_NUCLEAR_REVERSAL = True
+
+Execute with python trakt_cleanup.py and watch it clear the grid.
+
+📜 License
+This project is open-source and released under the MIT License. Modify, distribute, and upgrade the mainframe as you see fit. See the LICENSE file for details.
+
